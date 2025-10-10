@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Node
+node_modules/
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Database
+*.db
+
+# IDE
+.vscode/
+.DS_Store
