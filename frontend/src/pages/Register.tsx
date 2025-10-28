@@ -327,10 +327,10 @@ const Register = () => {
                       : 'bg-black/10 text-gray-700 border-black/10'
                   }`}>
                     <p>
-                      <strong className={isDark ? 'text-white' : 'text-black'}>📊 Data Collected:</strong> Username, email, name, models, visualizations
+                      <strong className={isDark ? 'text-white' : 'text-black'}> Data Collected:</strong> Username, email, name, models, visualizations
                     </p>
                     <p>
-                      <strong className={isDark ? 'text-white' : 'text-black'}>🛡️ Your Rights:</strong> Access, correct, delete, portability
+                      <strong className={isDark ? 'text-white' : 'text-black'}> Your Rights:</strong> Access, correct, delete, portability
                     </p>
                   </div>
                 )}

@@ -24,28 +24,28 @@ async def lifespan(app: FastAPI):
     Startup and shutdown events
     Tests database connection on startup
     """
-    logger.info("🚀 Starting Neural Network Visualization API...")
+    logger.info(" Starting Neural Network Visualization API...")
     
     # Test database connection
     try:
         # Try to connect to database
         with engine.connect() as connection:
-            logger.info("✅ Database connection successful!")
-            logger.info(f"📊 Connected to: {engine.url.database}")
-            logger.info(f"🔗 Host: {engine.url.host}")
+            logger.info(" Database connection successful!")
+            logger.info(f" Connected to: {engine.url.database}")
+            logger.info(f" Host: {engine.url.host}")
     except Exception as e:
-        logger.error("❌ Database connection failed!")
+        logger.error(" Database connection failed!")
         logger.error(f"Error: {str(e)}")
         raise
     
-    logger.info("✨ Application startup complete!")
+    logger.info(" Application startup complete!")
     
     yield  # Application runs here
     
     # Shutdown
-    logger.info("👋 Shutting down application...")
+    logger.info(" Shutting down application...")
     engine.dispose()
-    logger.info("✅ Cleanup complete!")
+    logger.info(" Cleanup complete!")
 
 
 # Create FastAPI app with lifespan
