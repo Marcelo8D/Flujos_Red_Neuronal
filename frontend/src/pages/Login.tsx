@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import ForgotPasswordModal from '../components/ForgotPasswordModal';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { login } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -166,7 +168,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`relative w-full py-3 px-4 font-semibold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] hover:shadow-2xl overflow-hidden group ${
+                className={`relative w-full py-3 px-4 font-semibold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 disabled:opacity-50 disabled: transform hover:scale-[1.02] hover:shadow-2xl overflow-hidden group ${
                   isDark
                     ? 'bg-gradient-to-r from-white via-gray-350 to-gray-500 text-black focus:ring-white/50 hover:shadow-white/30'
                     : 'bg-gradient-to-r from-black via-gray-700 to-gray-500 text-white focus:ring-black/50 hover:shadow-black/30'
@@ -199,8 +201,26 @@ const Login = () => {
                 </Link>
               </p>
             </div>
+            <div className="mt-6 text-center">
+              <p 
+                className={`font-semibold bg-clip-text text-transparent transition-all duration-300`}>
+                <span 
+                onClick={() => setShowForgotPassword(true)}
+                className={`font-semibold bg-clip-text text-transparent transition-all duration-300 cursor-pointer ${
+                  isDark
+                    ? 'bg-gradient-to-r from-white via-gray-200 to-gray-400 hover:from-gray-200 hover:via-gray-100 hover:to-white'
+                    : 'bg-gradient-to-r from-black via-gray-800 to-gray-600 hover:from-gray-800 hover:via-gray-700 hover:to-black'
+                }`}
+                >Forgot your password?
+                </span>
+              </p>
+            </div>
           </div>
         </div>
+        <ForgotPasswordModal 
+        isOpen={showForgotPassword} 
+        onClose={() => setShowForgotPassword(false)} 
+        />
       </div>
 
       {/* Custom CSS animations */}
