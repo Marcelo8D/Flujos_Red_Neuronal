@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { api } from '../services/api';
+import { useTranslation } from 'react-i18next';
 import ChangePasswordModal from '../components/ChangePasswordModal';
 
 interface ProfileData {
@@ -14,6 +15,7 @@ interface ProfileData {
 
 const Profile: React.FC = () => {
   const { isDark } = useTheme();
+  const { t } = useTranslation();
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
@@ -83,10 +85,10 @@ const Profile: React.FC = () => {
         <h1 className={`text-4xl font-bold mb-2 ${
           isDark ? 'text-white' : 'text-black'
         }`}>
-          👤 Profile Settings
+          👤 {t('common.profileSettings')}
         </h1>
         <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
-          Manage your account settings and preferences
+          {t('profile.manageAccount')}
         </p>
       </div>
 
@@ -137,7 +139,7 @@ const Profile: React.FC = () => {
           <h2 className={`text-2xl font-bold ${
             isDark ? 'text-white' : 'text-black'
           }`}>
-            Personal Information
+            {t('profile.personalInformation')}
           </h2>
           {!isEditing && (
             <button
@@ -148,7 +150,7 @@ const Profile: React.FC = () => {
                   : 'bg-black/10 hover:bg-black/20 text-black border border-black/20'
               }`}
             >
-              ✏️ Edit
+              ✏️ {t('common.edit')}
             </button>
           )}
         </div>
@@ -159,7 +161,7 @@ const Profile: React.FC = () => {
               <div>
                 <label className={`text-sm ${
                   isDark ? 'text-gray-400' : 'text-gray-600'
-                }`}>Username</label>
+                }`}>{t('profile.username')}</label>
                 <p className={`text-lg font-medium ${
                   isDark ? 'text-white' : 'text-black'
                 }`}>{profileData.username}</p>
@@ -175,7 +177,7 @@ const Profile: React.FC = () => {
               <div>
                 <label className={`text-sm ${
                   isDark ? 'text-gray-400' : 'text-gray-600'
-                }`}>Nombre</label>
+                }`}>{t('profile.firstName')}</label>
                 <p className={`text-lg font-medium ${
                   isDark ? 'text-white' : 'text-black'
                 }`}>{profileData.nombre}</p>
@@ -183,7 +185,7 @@ const Profile: React.FC = () => {
               <div>
                 <label className={`text-sm ${
                   isDark ? 'text-gray-400' : 'text-gray-600'
-                }`}>Apellidos</label>
+                }`}>{t('profile.lastName')}</label>
                 <p className={`text-lg font-medium ${
                   isDark ? 'text-white' : 'text-black'
                 }`}>{profileData.apellidos || '-'}</p>
@@ -192,7 +194,7 @@ const Profile: React.FC = () => {
             <div>
               <label className={`text-sm ${
                 isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>Member since</label>
+              }`}>{t('profile.memberSince')}</label>
               <p className={`text-lg font-medium ${
                 isDark ? 'text-white' : 'text-black'
               }`}>{new Date(profileData.fecha_registro).toLocaleDateString()}</p>
@@ -204,7 +206,7 @@ const Profile: React.FC = () => {
               <div>
                 <label className={`block text-sm font-medium mb-2 ${
                   isDark ? 'text-gray-300' : 'text-gray-700'
-                }`}>Nombre</label>
+                }`}>{t('profile.firstName')}</label>
                 <input
                   type="text"
                   value={editForm.nombre}
@@ -219,7 +221,7 @@ const Profile: React.FC = () => {
               <div>
                 <label className={`block text-sm font-medium mb-2 ${
                   isDark ? 'text-gray-300' : 'text-gray-700'
-                }`}>Apellidos</label>
+                }`}>{t('profile.lastName')}</label>
                 <input
                   type="text"
                   value={editForm.apellidos}
@@ -242,7 +244,7 @@ const Profile: React.FC = () => {
                     : 'bg-gradient-to-r from-black via-gray-700 to-gray-500 text-white hover:scale-105'
                 }`}
               >
-                {loading ? 'Saving...' : 'Save Changes'}
+                {loading ? t('common.loading') : t('profile.saveChanges')}
               </button>
               <button
                 type="button"
@@ -253,7 +255,7 @@ const Profile: React.FC = () => {
                     : 'bg-black/10 hover:bg-black/20 text-black border border-black/20'
                 }`}
               >
-                Cancel
+                {t('common.cancel')}
               </button>
             </div>
           </form>
@@ -271,11 +273,11 @@ const Profile: React.FC = () => {
             <h2 className={`text-2xl font-bold ${
               isDark ? 'text-white' : 'text-black'
             }`}>
-              🔒 Security
+              🔒 {t('profile.security')}
             </h2>
             <p className={`text-sm ${
               isDark ? 'text-gray-400' : 'text-gray-600'
-            }`}>Manage your password</p>
+            }`}>{t('profile.managePassword')}</p>
           </div>
           <button
             onClick={() => setShowChangePassword(true)}
@@ -285,7 +287,7 @@ const Profile: React.FC = () => {
                 : 'bg-black/10 hover:bg-black/20 text-black border border-black/20'
             }`}
           >
-            Change Password
+            {t('auth.changePassword')}
           </button>
         </div>
       </div>

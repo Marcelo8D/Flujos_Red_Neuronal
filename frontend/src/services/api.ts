@@ -36,8 +36,38 @@ export const modelsAPI = {
 
 export const projectsAPI = {
   create: (data: any) => api.post('/api/projects', data),
-  list: () => api.get('/api/projects'),
+  list: (estado?: string) => {
+    const params = estado ? `?estado=${estado}` : '';
+    return api.get(`/api/projects${params}`);
+  },
   getById: (id: number) => api.get(`/api/projects/${id}`),
   update: (id: number, data: any) => api.put(`/api/projects/${id}`, data),
   delete: (id: number) => api.delete(`/api/projects/${id}`),
+  uploadInputFile: (proyectoId: number, file: File, ataque: boolean = false) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post(`/api/projects/${proyectoId}/archivos-entrada?ataque=${ataque.toString()}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  getInputFiles: (proyectoId: number) => api.get(`/api/projects/${proyectoId}/archivos-entrada`),
+  getInputFile: (proyectoId: number, archivoId: number) => 
+    api.get(`/api/projects/${proyectoId}/archivos-entrada/${archivoId}`),
+  deleteInputFile: (proyectoId: number, archivoId: number) => 
+    api.delete(`/api/projects/${proyectoId}/archivos-entrada/${archivoId}`),
+  createVisualization: (proyectoId: number, layoutConfig?: any) =>
+    api.post(`/api/projects/${proyectoId}/visualizaciones`, { layout_config: layoutConfig || {} }),
+};
+
+export const exportsAPI = {
+  create: (visualizacionId: number, formato: 'pdf' | 'png' | 'svg' | 'json' | 'html') => 
+    api.post('/api/exports', { visualizacion_id: visualizacionId, formato }),
+  list: (visualizacionId?: number) => {
+    const params = visualizacionId ? `?visualizacion_id=${visualizacionId}` : '';
+    return api.get(`/api/exports${params}`);
+  },
+  download: (exportId: number) => 
+    api.get(`/api/exports/${exportId}/download`, { responseType: 'blob' }),
+  delete: (exportId: number) => 
+    api.delete(`/api/exports/${exportId}`),
 };
