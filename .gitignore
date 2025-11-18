@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 venv/
 .env
+SECRET_KEY_README.md
 
 # Node
 node_modules/

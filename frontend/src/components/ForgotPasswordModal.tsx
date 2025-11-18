@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { api } from '../services/api';
+import { useTranslation } from 'react-i18next';
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface ForgotPasswordModalProps {
 
 const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClose }) => {
   const { isDark } = useTheme();
+  const { t } = useTranslation();
   const [step, setStep] = useState<'email' | 'code'>('email');
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
@@ -27,10 +29,10 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
 
     try {
       await api.post('http://localhost:8000/api/users/request-reset-code', { email });
-      setMessage({ type: 'success', text: 'Reset code sent! Check your email.' });
+      setMessage({ type: 'success', text: t('auth.resetCodeSent') });
       setStep('code');
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.response?.data?.detail || 'Failed to send code' });
+      setMessage({ type: 'error', text: error.response?.data?.detail || t('auth.failedToSendCode') });
     } finally {
       setLoading(false);
     }
@@ -40,12 +42,12 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      setMessage({ type: 'error', text: 'Passwords do not match' });
+      setMessage({ type: 'error', text: t('auth.passwordsDontMatch') });
       return;
     }
 
     if (newPassword.length < 8) {
-      setMessage({ type: 'error', text: 'Password must be at least 8 characters' });
+      setMessage({ type: 'error', text: t('auth.passwordMin') });
       return;
     }
 
@@ -59,7 +61,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
         new_password: newPassword
       });
       
-      setMessage({ type: 'success', text: 'Password reset successfully! You can now login.' });
+      setMessage({ type: 'success', text: t('auth.passwordResetSuccess') });
       
       setTimeout(() => {
         onClose();
@@ -71,7 +73,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
         setMessage({ type: '', text: '' });
       }, 2000);
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.response?.data?.detail || 'Failed to reset password' });
+      setMessage({ type: 'error', text: error.response?.data?.detail || t('auth.resetPasswordFailed') });
     } finally {
       setLoading(false);
     }
@@ -114,12 +116,12 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
               ? 'bg-gradient-to-r from-white via-gray-200 to-gray-400'
               : 'bg-gradient-to-r from-black via-gray-800 to-gray-600'
           }`}>
-            {step === 'email' ? 'Forgot Password?' : 'Enter Reset Code'}
+            {step === 'email' ? t('auth.forgotPassword') : t('auth.enterResetCode')}
           </h2>
           <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
             {step === 'email' 
-              ? 'Enter your email to receive a reset code' 
-              : 'Check your email for the 6-digit code'}
+              ? t('auth.enterEmailForCode') 
+              : t('auth.checkEmailForCode')}
           </p>
         </div>
 
@@ -145,7 +147,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
               <label className={`block text-sm font-medium mb-2 ${
                 isDark ? 'text-gray-300' : 'text-gray-700'
               }`}>
-                Email Address
+                {t('auth.emailAddress')}
               </label>
               <input
                 type="email"
@@ -157,7 +159,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
                     ? 'bg-white/10 border-white/20 text-white placeholder-gray-400 focus:ring-white/50'
                     : 'bg-black/10 border-black/20 text-black placeholder-gray-600 focus:ring-black/50'
                 }`}
-                placeholder="your@email.com"
+                placeholder={t('auth.emailPlaceholder') as string}
                 disabled={loading}
               />
             </div>
@@ -171,7 +173,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
                   : 'bg-gradient-to-r from-black via-gray-700 to-gray-500 text-white hover:scale-105'
               }`}
             >
-              {loading ? 'Sending...' : '📧 Send Reset Code'}
+              {loading ? t('common.loading') : '📧 ' + (t('auth.sendResetCode') as string)}
             </button>
           </form>
         )}
@@ -183,7 +185,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
               <label className={`block text-sm font-medium mb-2 ${
                 isDark ? 'text-gray-300' : 'text-gray-700'
               }`}>
-                6-Digit Code
+                {t('auth.sixDigitCode')}
               </label>
               <input
                 type="text"
@@ -205,7 +207,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
               <label className={`block text-sm font-medium mb-2 ${
                 isDark ? 'text-gray-300' : 'text-gray-700'
               }`}>
-                New Password
+                {t('auth.newPassword')}
               </label>
               <input
                 type="password"
@@ -217,7 +219,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
                     ? 'bg-white/10 border-white/20 text-white placeholder-gray-400 focus:ring-white/50'
                     : 'bg-black/10 border-black/20 text-black placeholder-gray-600 focus:ring-black/50'
                 }`}
-                placeholder="Enter new password"
+                placeholder={t('auth.enterNewPassword') as string}
                 disabled={loading}
               />
             </div>
@@ -226,7 +228,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
               <label className={`block text-sm font-medium mb-2 ${
                 isDark ? 'text-gray-300' : 'text-gray-700'
               }`}>
-                Confirm Password
+                {t('auth.confirmPassword')}
               </label>
               <input
                 type="password"
@@ -238,7 +240,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
                     ? 'bg-white/10 border-white/20 text-white placeholder-gray-400 focus:ring-white/50'
                     : 'bg-black/10 border-black/20 text-black placeholder-gray-600 focus:ring-black/50'
                 }`}
-                placeholder="Confirm new password"
+                placeholder={t('auth.confirmNewPassword') as string}
                 disabled={loading}
               />
             </div>
@@ -252,7 +254,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
                   : 'bg-gradient-to-r from-black via-gray-700 to-gray-500 text-white hover:scale-105'
               }`}
             >
-              {loading ? 'Resetting...' : '🔒 Reset Password'}
+              {loading ? t('common.loading') : '🔒 ' + (t('auth.resetPassword') as string)}
             </button>
 
             <button
@@ -262,7 +264,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
                 isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'
               }`}
             >
-              ← Back to email
+              ← {t('auth.backToEmail')}
             </button>
           </form>
         )}

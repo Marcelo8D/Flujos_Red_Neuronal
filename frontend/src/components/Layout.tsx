@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
 import SettingsControls from './SettingsControls';
+import LanguageSelector from './LanguageSelector';
 import { useAuth } from '../context/AuthContext';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { t } = useTranslation();
   const { isDark } = useTheme();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const handleLogout = () => {
@@ -54,47 +58,29 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <Link
                 to="/"
                 className={`transition-colors font-medium ${
-                  isDark
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-black'
+                  location.pathname === '/'
+                    ? (isDark ? 'text-white border-b-2 border-white' : 'text-black border-b-2 border-black')
+                    : (isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black')
                 }`}
               >
-                Home
-              </Link>
-              <Link
-                to="/models"
-                className={`transition-colors font-medium ${
-                  isDark
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-black'
-                }`}
-              >
-                Models
+                {t('common.home')}
               </Link>
               <Link
                 to="/projects"
                 className={`transition-colors font-medium ${
-                  isDark
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-black'
+                  location.pathname.startsWith('/projects')
+                    ? (isDark ? 'text-white border-b-2 border-white' : 'text-black border-b-2 border-black')
+                    : (isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black')
                 }`}
               >
-                Projects
-              </Link>
-              <Link
-                to="/visualizations"
-                className={`transition-colors font-medium ${
-                  isDark
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-black'
-                }`}
-              >
-                Visualizations
+                {t('common.projects')}
               </Link>
             </nav>
 
             {/* Settings Controls & User Menu */}
             <div className="flex items-center space-x-4">
+              {/* Language Selector */}
+              <LanguageSelector />
               {/* Settings Controls (Theme) */}
               <SettingsControls />
 
@@ -148,7 +134,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     }`}>
                       <p className={`text-sm ${
                         isDark ? 'text-gray-400' : 'text-gray-600'
-                      }`}>Signed in as</p>
+                      }`}>{t('common.signedInAs')}</p>
                       <p className={`text-sm font-medium truncate ${
                         isDark ? 'text-white' : 'text-black'
                       }`}>{user?.email}</p>
@@ -162,7 +148,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                       }`}
                       onClick={() => setShowUserMenu(false)}
                     >
-                      Profile Settings
+                      {t('common.profileSettings')}
                     </Link>
                     <button
                       onClick={handleLogout}
@@ -172,7 +158,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                           : 'text-red-600 hover:bg-black/10'
                       }`}
                     >
-                      Sign Out
+                      {t('common.signOut')}
                     </button>
                   </div>
                 )}

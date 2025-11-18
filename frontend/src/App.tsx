@@ -7,6 +7,9 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Layout from './components/Layout';
+import Visualization from './pages/Visualization';
+import Projects from './pages/Projects';
+import ProjectDetail from './pages/ProjectDetail';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -46,6 +49,36 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Profile />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+             <Route
+              path="/visualization/:projectId?"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Visualization />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Projects />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/projects/:id"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ProjectDetail />
                   </Layout>
                 </ProtectedRoute>
               }

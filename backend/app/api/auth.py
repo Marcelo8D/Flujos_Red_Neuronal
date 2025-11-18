@@ -6,6 +6,11 @@ from jose import JWTError, jwt
 from pydantic import BaseModel, EmailStr, field_validator
 import re
 import bcrypt
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 from app.database import get_db
 from app.models.user import User
@@ -13,9 +18,11 @@ from app.models.user import User
 router = APIRouter()
 
 # Security configuration
-SECRET_KEY = "your-secret-key-change-in-production"
+# SECRET_KEY: Used to sign and verify JWT tokens. 
+# - In production: MUST be a long, random, secret string (at least 32 characters)
+SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-change-in-production-prototype-only")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1440
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
@@ -160,8 +167,7 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
         email=user_data.email,
         password_hash=get_password_hash(user_data.password),
         nombre=user_data.nombre,
-        apellidos=user_data.apellidos,
-        proveedor_autenticacion='LOCAL',
+        apellidos=user_data.apellidos,       
         activo=True
     )
     
@@ -216,7 +222,7 @@ async def privacy_policy():
         "version": "1.0",
         "data_collected": ["Username", "Email", "Name", "Models", "Visualizations"],
         "user_rights": ["Access", "Correct", "Delete", "Portability"],
-        "contact": "privacy@tfg.com"
+        "contact": "hnsuporte1@gmail.com"
     }
 
 @router.post("/request-data-deletion")

@@ -9,6 +9,8 @@ from app.database import engine, Base
 # Import routers
 from app.api.auth import router as auth_router
 from app.api.users import router as users_router
+from app.api.projects import router as projects_router
+from app.api.exports import router as exports_router
 
 # Configure logging
 logging.basicConfig(
@@ -38,6 +40,14 @@ async def lifespan(app: FastAPI):
         logger.error(f"Error: {str(e)}")
         raise
     
+    # Create tables if they don't exist
+    try:
+        Base.metadata.create_all(bind=engine)
+        logger.info(" Database tables ensured (create_all)")
+    except Exception as e:
+        logger.error(f" Failed to create tables: {str(e)}")
+        raise
+
     logger.info(" Application startup complete!")
     
     yield  # Application runs here
@@ -101,6 +111,8 @@ async def health_check():
 # Include routers
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/api/users", tags=["Users"])
+app.include_router(projects_router, prefix="/api/projects", tags=["Projects"])
+app.include_router(exports_router, prefix="/api/exports", tags=["Exports"])
 
 
 if __name__ == "__main__":

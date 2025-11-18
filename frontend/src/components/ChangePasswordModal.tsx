@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { api } from '../services/api';
+import { useTranslation } from 'react-i18next';
 
 interface ChangePasswordModalProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface ChangePasswordModalProps {
 
 const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClose }) => {
   const { isDark } = useTheme();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     current_password: '',
     new_password: '',
@@ -23,12 +25,12 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
     e.preventDefault();
 
     if (formData.new_password !== formData.confirm_password) {
-      setMessage({ type: 'error', text: 'Passwords do not match' });
+      setMessage({ type: 'error', text: t('auth.passwordsDontMatch') });
       return;
     }
 
     if (formData.new_password.length < 8) {
-      setMessage({ type: 'error', text: 'Password must be at least 8 characters' });
+      setMessage({ type: 'error', text: t('auth.passwordMin') });
       return;
     }
 
@@ -41,7 +43,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
         new_password: formData.new_password
       });
       
-      setMessage({ type: 'success', text: 'Password changed successfully!' });
+      setMessage({ type: 'success', text: t('auth.passwordChanged') });
       
       setTimeout(() => {
         onClose();
@@ -51,7 +53,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
     } catch (error: any) {
       setMessage({ 
         type: 'error', 
-        text: error.response?.data?.detail || 'Failed to change password' 
+        text: error.response?.data?.detail || t('auth.changePasswordFailed') 
       });
     } finally {
       setLoading(false);
@@ -101,10 +103,10 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
               ? 'bg-gradient-to-r from-white via-gray-200 to-gray-400'
               : 'bg-gradient-to-r from-black via-gray-800 to-gray-600'
           }`}>
-            Change Password
+            {t('auth.changePassword')}
           </h2>
           <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-            Enter your current password and choose a new one
+            {t('auth.changePasswordDesc')}
           </p>
         </div>
 
@@ -129,7 +131,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
             <label className={`block text-sm font-medium mb-2 ${
               isDark ? 'text-gray-300' : 'text-gray-700'
             }`}>
-              Current Password
+              {t('auth.currentPassword')}
             </label>
             <input
               type="password"
@@ -141,7 +143,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                   ? 'bg-white/10 border-white/20 text-white placeholder-gray-400 focus:ring-white/50'
                   : 'bg-black/10 border-black/20 text-black placeholder-gray-600 focus:ring-black/50'
               }`}
-              placeholder="Enter current password"
+              placeholder={t('auth.enterCurrentPassword') as string}
               disabled={loading}
             />
           </div>
@@ -150,7 +152,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
             <label className={`block text-sm font-medium mb-2 ${
               isDark ? 'text-gray-300' : 'text-gray-700'
             }`}>
-              New Password
+              {t('auth.newPassword')}
             </label>
             <input
               type="password"
@@ -162,11 +164,11 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                   ? 'bg-white/10 border-white/20 text-white placeholder-gray-400 focus:ring-white/50'
                   : 'bg-black/10 border-black/20 text-black placeholder-gray-600 focus:ring-black/50'
               }`}
-              placeholder="Enter new password"
+              placeholder={t('auth.enterNewPassword') as string}
               disabled={loading}
             />
             <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              Min 8 chars, 1 uppercase, 1 number
+              {t('auth.passwordRules')}
             </p>
           </div>
 
@@ -174,7 +176,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
             <label className={`block text-sm font-medium mb-2 ${
               isDark ? 'text-gray-300' : 'text-gray-700'
             }`}>
-              Confirm New Password
+              {t('auth.confirmNewPassword')}
             </label>
             <input
               type="password"
@@ -186,7 +188,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                   ? 'bg-white/10 border-white/20 text-white placeholder-gray-400 focus:ring-white/50'
                   : 'bg-black/10 border-black/20 text-black placeholder-gray-600 focus:ring-black/50'
               }`}
-              placeholder="Confirm new password"
+              placeholder={t('auth.confirmNewPassword') as string}
               disabled={loading}
             />
           </div>
@@ -201,7 +203,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                   : 'bg-gradient-to-r from-black via-gray-700 to-gray-500 text-white hover:scale-105'
               }`}
             >
-              {loading ? 'Changing...' : 'Change Password'}
+              {loading ? t('common.loading') : t('auth.changePassword')}
             </button>
             <button
               type="button"
@@ -212,7 +214,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                   : 'bg-black/10 hover:bg-black/20 text-black border border-black/20'
               }`}
             >
-              Cancel
+              {t('common.cancel')}
             </button>
           </div>
         </form>

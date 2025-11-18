@@ -1,0 +1,12 @@
+{
+  "visualizacion_id": 1,
+  "proyecto_id": 1,
+  "layout_config": {
+    "activationMode": "color",
+    "showComparison": true,
+    "selectedNetwork": 3,
+    "selectedAdversarial": 5
+  },
+  "fecha_creacion": "2025-11-15T15:59:52.582675+00:00",
+  "activo": true
+}
