@@ -268,15 +268,9 @@ async def generate_export_content(visualizacion: Visualizacion, formato: Formato
 </svg>"""
     
     elif formato == FormatoExportacion.PNG:
-        # For PNG, we'd need PIL/Pillow to generate an image
-        # For now, return a placeholder message
-        # In production, you'd generate an actual PNG image
         return b"PNG placeholder - implement with PIL/Pillow"
     
     elif formato == FormatoExportacion.PDF:
-        # For PDF, we'd need reportlab or similar
-        # For now, return a placeholder
-        # In production, you'd generate an actual PDF
         return b"PDF placeholder - implement with reportlab"
     
     return ""
