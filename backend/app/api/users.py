@@ -12,6 +12,16 @@ from app.database import get_db
 from app.models.user import User
 from app.api.auth import get_current_user, get_password_hash, verify_password
 
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Gmail credentials
+GMAIL_USER = os.getenv("GMAIL_USER")
+GMAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")
+
 router = APIRouter()
 
 reset_codes = {}
@@ -37,11 +47,8 @@ class ResetPasswordWithCode(BaseModel):
 def send_email(to_email: str, subject: str, body: str):
 
     try:
-        gmail_user = "hnsuporte1@gmail.com"
-        gmail_password = "ufuk gssx tenz dmiu"
-        
         message = MIMEMultipart()
-        message["From"] = gmail_user
+        message["From"] = GMAIL_USER
         message["To"] = to_email
         message["Subject"] = subject
         
@@ -49,7 +56,7 @@ def send_email(to_email: str, subject: str, body: str):
         
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
             server.starttls()
-            server.login(gmail_user, gmail_password)
+            server.login(GMAIL_USER, GMAIL_PASSWORD)
             server.send_message(message)
         
         return True

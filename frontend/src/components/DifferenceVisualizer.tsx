@@ -193,7 +193,36 @@ const DifferenceVisualizer: React.FC<DifferenceVisualizerProps> = ({
           </div>
           
           {/* Connection lines showing differences */}
-
+          <div className="absolute inset-0 pointer-events-none" style={{ top: '50%', transform: 'translateY(-50%)' }}>
+            <svg className="w-full h-full" style={{ position: 'absolute', top: 0, left: 0, height: '100%' }}>
+              {layerDifferences.slice(0, -1).map((layerDiff, idx) => {
+                const normalizedDiff = difference.maxDifference > 0 
+                  ? Math.min(layerDiff / difference.maxDifference, 1) 
+                  : 0;
+                const color = getColorForDifference(layerDiff);
+                const totalLayers = layerDifferences.length;
+                const layerSpacing = 100 / (totalLayers - 1);
+                const x1 = (idx * layerSpacing) + 8; // 8% offset for first layer
+                const x2 = ((idx + 1) * layerSpacing) + 8;
+                const centerY = 50;
+                
+                return (
+                  <line
+                    key={idx}
+                    x1={`${x1}%`}
+                    y1={`${centerY}%`}
+                    x2={`${x2}%`}
+                    y2={`${centerY}%`}
+                    stroke={color}
+                    strokeWidth={Math.max(3, 2 + normalizedDiff * 6)}
+                    opacity={Math.max(0.5, 0.4 + normalizedDiff * 0.6)}
+                    strokeDasharray={normalizedDiff > 0.5 ? "8,4" : "none"}
+                    style={{ filter: `drop-shadow(0 0 ${normalizedDiff * 3}px ${color})` }}
+                  />
+                );
+              })}
+            </svg>
+          </div>
         </div>
       </div>
 
